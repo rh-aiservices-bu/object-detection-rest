@@ -1,2 +1,6 @@
 Flask
 gunicorn
+tensorflow
+matplotlib
+six
+numpy
