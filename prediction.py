@@ -11,19 +11,19 @@ def predict(body):
     img_bytes = base64.decodebytes(base64img.encode())
     detections = detect(img_bytes)
     cleaned = clean_detections(detections)
-    
+
     return { 'detections': cleaned }
 
 
-def detect(img):    
+def detect(img):
     image = tf.image.decode_jpeg(img, channels=3)
     converted_img  = tf.image.convert_image_dtype(image, tf.float32)[tf.newaxis, ...]
     result = detector(converted_img)
     num_detections = len(result["detection_scores"])
-    
+
     output_dict = {key:value.numpy().tolist() for key, value in result.items()}
     output_dict['num_detections'] = num_detections
-    
+
     return output_dict
 
 
@@ -45,5 +45,14 @@ def clean_detections(detections):
             'score': detections['detection_scores'][i],
         }
         cleaned.append(d)
-        
+
     return cleaned
+
+
+def preload_model():
+    blank_jpg = tf.io.read_file('blank.jpeg')
+    blank_img = tf.image.decode_jpeg(blank_jpg, channels=3)
+    detector(tf.image.convert_image_dtype(blank_img, tf.float32)[tf.newaxis, ...])
+
+
+preload_model()
