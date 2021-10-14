@@ -1,5 +1,7 @@
+## Application specific 
 Flask
 gunicorn
+## Data Science libraries
 tensorflow
 matplotlib
 six
